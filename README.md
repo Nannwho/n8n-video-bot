@@ -16,4 +16,4 @@
 ## 📸 Скриншоты  ![Снимок 18 07 2025 в 16 45](https://github.com/user-attachments/assets/61b475c6-6340-4d47-9bbc-d8cf146cd65d)
 ![Снимок 18 07 2025 в 16 43](https://github.com/user-attachments/assets/2343aaee-7b4f-48d2-8769-cacc9d21e3df)
 ![Снимок 18 07 2025 в 16 49](https://github.com/user-attachments/assets/4ae968a8-e2f1-4e6f-a872-efbb9b343e71)
-![Снимок 18 07 2025 в 16 43](https://github.com/user-attachments/assets/331e3f70-e43c-404f-86db-35f4924ae35a)
+

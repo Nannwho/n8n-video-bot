@@ -1,0 +1,1138 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1940,
+        840
+      ],
+      "id": "43794e05-3b5f-4b62-88f5-81356c0c2330",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "19d20076-1655-435a-85ee-26e1904b1916",
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9d6b5fd5-3312-4acd-8d89-183db90e316f",
+                    "leftValue": "={{ $json.callback_query }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        280,
+        220
+      ],
+      "id": "9dd537a4-d498-4ce4-9ab5-72e83360daa9",
+      "name": "Тип сообщения (callback/message)",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Привет! Я бот-генератор видео для твоего YouTube. 🎬\n\nПросто напиши мне тему для своего видео, и я:\n1️⃣ Создам крутой сценарий\n2️⃣ Подберу подходящего актера\n3️⃣ Сгенерирую видео\n\nЖду твою идею! ✨",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        400
+      ],
+      "id": "d7a8b9c0-1e2f-11ee-be56-0242ac120002",
+      "name": "Приветственное сообщение",
+      "webhookId": "d7a8b9c0-1e2f-11ee-be56-0242ac120003",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "telegram_updates",
+          "mode": "list",
+          "cachedResultName": "telegram_updates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "chat_id": "={{ $json.message.chat.id }}",
+            "message_id": "={{ $json.message.message_id }}",
+            "update_type": "message",
+            "update_id": "={{ $json.update_id }}",
+            "sender_username": "={{ $json.message.chat.username }}",
+            "message_text": "={{ $json.message.text }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "update_id",
+              "displayName": "update_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "update_type",
+              "displayName": "update_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sender_username",
+              "displayName": "sender_username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message_text",
+              "displayName": "message_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "callback_query_id",
+              "displayName": "callback_query_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "callback_data",
+              "displayName": "callback_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        540,
+        320
+      ],
+      "id": "5cc1ab6f-2111-445d-8ab4-ab20288e62f7",
+      "name": "Вставка сообщений",
+      "credentials": {
+        "postgres": {
+          "id": "",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "telegram_updates",
+          "mode": "list",
+          "cachedResultName": "telegram_updates"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $json.id - 1}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        720,
+        140
+      ],
+      "id": "761e99bb-7a74-4ae6-bd43-cd32f83e428b",
+      "name": "Вывод предыдущего сообщения",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Вживись в роль высококвалифицированный эксперт. Сделай текст для рилс по теме - {{ $('Telegram Trigger').item.json.message.text }}. Структура: крючок-ценность-триггер-оффер. Я хочу, чтобы это сработало даже на \"холодную\" аудиторию. Используй хуки для привлечения внимания зрителя. В результате должен быть лишь текст эксперта, который он будет читать, без ДОПОЛНИТЕЛЬНОЙ ИНФОРМАЦИИ. Текст не должен содержать лишних символов и абзацев, кавычек, чтобы не вызывать ошибку JSON. Текста должно быть на 40 - 60 секунд. В каждом слове выдели ударные буквы большими Как в этом примере: окнО бЫло открЫто, в него залетЕла мУха.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1960,
+        560
+      ],
+      "id": "6bda8478-4050-4c55-b73a-69869a93f903",
+      "name": "Написание текстов для аватара"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Оставить текст",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "✏️ Редактировать текст",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {},
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2560,
+        580
+      ],
+      "id": "8e2bef52-57d2-4f68-91a3-316aa141ef8b",
+      "name": "Вывод текста аватара",
+      "webhookId": "7e6aa873-f6fc-4540-8d0c-a8043d93317f",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "Задайте тему для видео",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Задать тему",
+                    "additionalFields": {
+                      "callback_data": "set_topic"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        20
+      ],
+      "id": "4f2ed844-4e8a-44ea-8376-6146c2d990fe",
+      "name": "Запрос темы",
+      "webhookId": "d18b2502-e8f4-48d8-a580-3548e66e595f",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        260
+      ],
+      "id": "4b6c4291-b1e4-40b6-a1df-e9cc4c7afb42",
+      "name": "Merge",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "675c69fd-2b1e-42b7-a833-597b8cd3d2d5",
+              "name": "topic",
+              "value": "={{ $json.message_text || $json.callback_data }}",
+              "type": "string"
+            },
+            {
+              "id": "fd1779b0-bfdc-4f22-9c77-a9da913692e3",
+              "name": "chat_id",
+              "value": "={{ $json.chat_id || $json.message.chat.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1700,
+        780
+      ],
+      "id": "fecf3d3c-983a-4023-8725-be8cc98183b1",
+      "name": "Set Fields"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -300,
+        420
+      ],
+      "id": "d3030e84-a675-4986-b34e-ac4618f48d62",
+      "name": "Telegram Trigger",
+      "webhookId": "d970e8ba-65f1-4403-b4a8-a17288087441",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c8ee9a2a-f546-4494-9493-72c7ee6fa270",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "✅ Оставить текст",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "4fda6c1a-f444-4dbd-885d-47a49deea858",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "✏️ Редактировать текст",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2900,
+        660
+      ],
+      "id": "333f7a70-53c8-4d13-b7f5-f734b9d7bc9f",
+      "name": "Проверка выбора пользователя"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "Отправьте исправленный текст для видео:",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3140,
+        500
+      ],
+      "id": "3db64635-057a-416a-93f2-96b15deb0c09",
+      "name": "Запрос исправленного текста",
+      "webhookId": "71ae9a9a-a6ea-4b16-bc72-444753747822",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "=1846618654",
+        "text": "Начало генерации видео",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3260,
+        740
+      ],
+      "id": "8dc0350b-91c9-4473-9d1b-85a9281a9af7",
+      "name": "Уведомление о начале генерации",
+      "webhookId": "a838085d-9a83-4ff6-b259-6d99cd97b7cd",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.heygen.com/v2/video/generate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": ""
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dimension\": {\n    \"width\": 1280,\n    \"height\": 720\n  },\n  \"video_inputs\": [\n    {\n      \"character\": {\n        \"type\": \"avatar\",\n        \"avatar_id\": \"Gala_sitting_office_front\",\n        \"scale\": 1,\n        \"avatar_style\": \"normal\"\n      },\n      \"voice\": {\n        \"type\": \"text\",\n        \"voice_id\": \"35b75145af9041b298c720f23375f578\",\n        \"input_text\": \"{{ $('Вывод текста аватара').item.json.result.text }}\",\n        \"speed\": 1\n      }\n    }\n  ],\n  \"caption\": true,\n  \"caption_config\": {\n    \"style\": {\n      \"font_family\": \"Public Sans\",\n      \"font_size\": 36,\n      \"font_weight\": \"bold\",\n      \"text_color\": \"#FFFFFF\",\n      \"background_color\": \"transparent\",\n      \"stroke_color\": \"#000000\",\n      \"stroke_width\": 2,\n      \"position\": \"bottom\",\n      \"alignment\": \"center\",\n      \"single_line\": true,\n      \"word_highlight\": {\n        \"enabled\": true,\n        \"highlight_color\": \"#9C27B0\",\n        \"transition\": \"smooth\",\n        \"duration_ms\": 300\n      },\n      \"margin_bottom\": 60\n    },\n    \"max_chars_per_line\": 40\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3580,
+        1480
+      ],
+      "id": "b38625d0-d9e3-4141-bc0f-7a39c1aa49c1",
+      "name": "Генерация видео",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.heygen.com/v1/video_status.get",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "video_id",
+              "value": "={{ $node[\"Генерация видео\"].json.data.video_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4020,
+        1440
+      ],
+      "id": "08d68286-d180-430c-af38-01d16bbe3276",
+      "name": "Проверка статуса видео",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendVideo",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "file": "={{ $json.data.video_url }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4500,
+        1580
+      ],
+      "id": "eb78715f-515a-4b01-b0ac-0e69251a158f",
+      "name": "Отправка видео",
+      "webhookId": "5966e84d-4f64-412b-b1f9-a1f102c4476f",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4340,
+        1940
+      ],
+      "id": "7e28457d-1020-4ac4-ab75-76024a6d3744",
+      "name": "Ожидание 30 сек",
+      "webhookId": "87ede6a2-f694-43cf-861f-bffccb286987"
+    },
+    {
+      "parameters": {
+        "content": "## Генерация сценария",
+        "height": 840,
+        "width": 820,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        320
+      ],
+      "id": "8d001aa8-5abc-4f33-8dae-235ca7ee66ea",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Принятие темы в тг",
+        "height": 840,
+        "width": 1500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1887a3ec-afcd-466d-b04a-9c4f7f9bb191",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Ветки редактирования и принятия сценария",
+        "height": 840,
+        "width": 820
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2780,
+        200
+      ],
+      "id": "6288b430-0ac2-43ed-9d78-72f988cea455",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Генерация аватара",
+        "height": 820,
+        "width": 1800,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3400,
+        1380
+      ],
+      "id": "55a6f805-0a73-48f9-86f0-ffd85245f08b",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Выбор актера",
+        "height": 840,
+        "width": 1700,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        280
+      ],
+      "id": "b56104f2-f2c2-4167-a7c9-e798993c1eb0",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9270883c-1075-45f5-b3cb-1f32d7d8efca",
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4180,
+        1700
+      ],
+      "id": "bdf854dc-7fbc-48ab-9f48-bd01b282e761",
+      "name": "Готово?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot[REDACTED]/getUpdates",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"timeout\": 30,\n  \"allowed_updates\": [\"callback_query\"],\n  \"offset\": \"={{ $json.lastUpdateId || 0 }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3440,
+        220
+      ],
+      "id": "c132bbc6-67fc-406a-81ce-efa97624d6c2",
+      "name": "Получение обновлений1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12345678-1234-5678-9012-345678901234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2920,
+        1460
+      ],
+      "id": "5a3c66a4-3a2f-4b1b-a78b-6ade847207d1",
+      "name": "Установка исправленного текста",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot[REDACTED]/getUpdates",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"timeout\": 30,\n  \"allowed_updates\": [\"callback_query\"],\n  \"offset\": \"={{ $json.lastUpdateId || 0 }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2760,
+        420
+      ],
+      "id": "1875f0a5-3685-455d-8b19-73c6c879d437",
+      "name": "Получение обновлений2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2260,
+        1320
+      ],
+      "id": "03eb5459-8e90-42de-a037-303c1fe2c769",
+      "name": "HTTP Request1",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2120,
+        860
+      ],
+      "id": "bc5da34a-4d8b-4344-bfc9-3c39add2db13",
+      "name": "Simple Memory",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Написание текстов для аватара",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Тип сообщения (callback/message)": {
+      "main": [
+        [
+          {
+            "node": "Приветственное сообщение",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Вставка сообщений",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Приветственное сообщение": {
+      "main": [
+        [
+          {
+            "node": "Вставка сообщений",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Вставка сообщений": {
+      "main": [
+        [
+          {
+            "node": "Вывод предыдущего сообщения",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Вывод предыдущего сообщения": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Написание текстов для аватара": {
+      "main": [
+        [
+          {
+            "node": "Вывод текста аватара",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Запрос темы": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Fields": {
+      "main": [
+        [
+          {
+            "node": "Написание текстов для аватара",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Тип сообщения (callback/message)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Вывод текста аватара": {
+      "main": [
+        [
+          {
+            "node": "Получение обновлений2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Проверка выбора пользователя": {
+      "main": [
+        [
+          {
+            "node": "Запрос исправленного текста",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Уведомление о начале генерации",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Уведомление о начале генерации": {
+      "main": [
+        [
+          {
+            "node": "Генерация видео",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Генерация видео": {
+      "main": [
+        [
+          {
+            "node": "Проверка статуса видео",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Проверка статуса видео": {
+      "main": [
+        [
+          {
+            "node": "Готово?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ожидание 30 сек": {
+      "main": [
+        [
+          {
+            "node": "Проверка статуса видео",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Запрос исправленного текста": {
+      "main": [
+        [
+          {
+            "node": "Получение обновлений1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получение обновлений1": {
+      "main": [
+        [
+          {
+            "node": "Вывод текста аватара",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Готово?": {
+      "main": [
+        [
+          {
+            "node": "Отправка видео",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ожидание 30 сек",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Установка исправленного текста": {
+      "main": [
+        [
+          {
+            "node": "Генерация видео",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получение обновлений2": {
+      "main": [
+        [
+          {
+            "node": "Проверка выбора пользователя",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Написание текстов для аватара",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b4888156-656a-4d8f-8ac9-b3c2a8e67899",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d5397b60da074f8652869d873663ede2e9f7b1d3aa61f1fd4837589d87e47fd6"
+  },
+  "id": "26G9g0cKZW2ildlm",
+  "tags": []
+}
